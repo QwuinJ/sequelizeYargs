@@ -1,5 +1,3 @@
-// copy over stuff from mongoDB files
-
 require('./db/connection');
 const yargs = require('yargs');
 const {
