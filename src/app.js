@@ -2,7 +2,12 @@
 
 require('./db/connection');
 const yargs = require('yargs');
-const { addMovie, readMovie, listMovies } = require('./movie/movie.functions');
+const {
+	addMovie,
+	readMovie,
+	updateMovie,
+	deleteMovie,
+} = require('./movie/movie.functions');
 
 const app = async (args) => {
 	try {
@@ -24,8 +29,13 @@ const app = async (args) => {
 				title: args.title,
 				key: args.key,
 				value: args.value,
-			}
-			await updateMovie 
+			};
+			await updateMovie(updateObj);
+		} else if (args.delete) {
+			const movieObj = {
+				title: args.title,
+			};
+			await deleteMovie(movieObj);
 		}
 	} catch (e) {
 		console.log(e);
