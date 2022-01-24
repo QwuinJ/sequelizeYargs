@@ -1,9 +1,16 @@
+const Actor = require('../actor/actor.table');
 const Movie = require('./movie.table');
 
 exports.addMovie = async (MovieObj) => {
 	try {
 		await Movie.sync();
-		await Movie.create(MovieObj);
+		await Movie.create(MovieObj, {
+			include: [
+				{
+					association: Actor,
+				},
+			],
+		});
 		console.log(`Added ${MovieObj.title} to database`);
 	} catch (e) {
 		console.log(e);
@@ -32,10 +39,7 @@ exports.updateMovie = async (updateObj) => {
 		const newValue = updateObj.value;
 		const oldTitle = updateObj.title;
 		await Movie.sync();
-		const result = await Movie.update(
-			{ [newKey]: newValue },
-			{ where: { title: oldTitle } }
-		);
+		await Movie.update({ [newKey]: newValue }, { where: { title: oldTitle } });
 		await Movie.sync();
 		const updatedMovie = await Movie.findOne({ where: { title: oldTitle } });
 		console.log(
